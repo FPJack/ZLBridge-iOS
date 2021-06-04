@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+     function onClickB1() {
+        window.ZLBridge.call('test',(arg) => {
+            document.getElementById("b1").innerHTML = JSON.stringify(arg);
+        });
+    }
+    function onClickB4() {
+         window.ZLBridge.call('upload',{"id":"js异步传过来的值"},(arg) => {
+            document.getElementById("b4").innerHTML = JSON.stringify(arg);
+        });
+    }
+    function onClickB3() {
+        window.ZLBridge.register("jsMethod",(arg) => {
+             return arg?arg[0]:null;
+         });
+    }     
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <button id="b1" onclick="onClickB1()">js调用原生</button>
+    </div>
+    <div>
+        <button id="b4"   onclick="onClickB4()">js调用原生,原生连续回调</button>
+    </div>
+    <div>
+        <button id="b3" onclick="onClickB3()">js注册原生方法：jsMethod</button>
+    </div>
+
+</body>
+</html>

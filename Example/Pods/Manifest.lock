@@ -1,0 +1,27 @@
+PODS:
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - ZLBridge (0.1.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase
+  - ZLBridge (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - FBSnapshotTestCase
+
+EXTERNAL SOURCES:
+  ZLBridge:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  ZLBridge: 2d1ae4aff2c2f68dbc2fb754e4739854c5997396
+
+PODFILE CHECKSUM: a92f2efce20fdb3c799f6094970ddb7d434b43c9
+
+COCOAPODS: 1.9.3

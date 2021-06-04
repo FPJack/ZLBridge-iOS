@@ -1,0 +1,6 @@
+framework module ZLBridge {
+  umbrella header "ZLBridge-umbrella.h"
+
+  export *
+  module * { export * }
+}
