@@ -37,6 +37,8 @@
     ZLMsgBody *obj = [[ZLMsgBody alloc] init];
     obj.name = dic[@"name"];
     obj.body = dic[@"body"];
+    obj.callID = dic[@"callID"];
+    obj.end = [NSString stringWithFormat:@"%@",dic[@"end"]];
     obj.jsMethodId = dic[@"jsMethodId"];
     return obj;
 }
@@ -66,6 +68,20 @@ static const char JSCompletionHandlersKey = '\0';
     }
     return dic;
 }
+
+static const char JSCallHandlersKey = '\0';
+- (void)setCallHanders:(NSMutableDictionary<NSString *,JSCompletionHandler> *)callHanders {
+    objc_setAssociatedObject(self, &JSCallHandlersKey,
+                             callHanders,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (NSMutableDictionary<NSString*,JSCompletionHandler> *)callHanders {
+    NSMutableDictionary *dic = objc_getAssociatedObject(self, &JSCallHandlersKey);
+    if (dic == nil) {
+        dic = [NSMutableDictionary dictionary];
+        self.callHanders = dic;
+    }
+    return dic;
+}
 - (void)initBridgeWithLocalJS:(BOOL )localJs{
     if (localJs) {
         NSBundle *selfBundle = [NSBundle bundleForClass:ZLBridge.class];
@@ -82,8 +98,20 @@ static const char JSCompletionHandlersKey = '\0';
     __weak typeof(self) weakSelf = self;
     bridge.msgCallback = ^(ZLMsgBody * _Nonnull message) {
         NSString *name = message.name;
-        NSString *jsMethodId = message.jsMethodId;
+        NSString *callID = message.callID;
+        NSString *end = message.end;
         id body = message.body;
+        if (callID) {
+           JSCompletionHandler callHandler = weakSelf.callHanders[callID];
+            if (callHandler) {
+                callHandler(body,nil);
+                if ([end isKindOfClass:NSString.class] && [end isEqualToString:@"1"]) {
+                    [weakSelf.callHanders removeObjectForKey:callID];
+                }
+            }
+            return;
+        }
+        NSString *jsMethodId = message.jsMethodId;
         JSRegistHandler registHandler = weakSelf.registHanders[name];
         JSCallbackHandler callBack =  ^(id result,BOOL end){
             NSMutableDictionary *mDic = NSMutableDictionary.dictionary;
@@ -105,14 +133,35 @@ static const char JSCompletionHandlersKey = '\0';
     self.registHanders[methodName] = registHandler;
 }
 -(void)callHandler:(NSString * _Nonnull) methodName  completionHandler:(JSCompletionHandler _Nonnull)completionHandler{
-    NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCall('%@');",methodName];
-    [self evaluateJavaScript:js completionHandler:completionHandler];
+    [self callHandler:methodName arguments:nil completionHandler:completionHandler];
 }
 -(void)callHandler:(NSString * _Nonnull) methodName  arguments:(NSArray * _Nullable) args completionHandler:(JSCompletionHandler _Nonnull)completionHandler{
     args = args == nil ? @[] : args;
-    NSDictionary *dic = @{@"result":args};
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    if (args) dic[@"result"] = args;
+    NSString *ID;
+    if (completionHandler) {
+        ID = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+        dic[@"callID"] = ID;
+        self.callHanders[ID] = completionHandler;
+    }
     NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
-    [self evaluateJavaScript:js completionHandler:completionHandler];
+    __weak typeof(self) weakSelf = self;
+    [self evaluateJavaScript:js completionHandler:^(NSDictionary* _Nullable obj, NSError * _Nullable error) {
+        if (error) {
+            if (completionHandler) completionHandler(nil,error);
+            [weakSelf.callHanders removeObjectForKey:ID];
+        }else {
+            if ([obj isKindOfClass:NSDictionary.class]) {
+                NSString *sync = obj[@"sync"];
+                id result = obj[@"result"];
+                if ([sync isEqual:NSString.class] && sync.boolValue) {
+                    [weakSelf.callHanders removeObjectForKey:ID];
+                }
+                if (completionHandler) completionHandler(result,nil);
+            }
+        }
+    }];
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
     if (!callback) return;

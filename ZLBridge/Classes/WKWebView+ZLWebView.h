@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy)NSString *name;
 @property (nonatomic,copy)NSString *jsMethodId;
 @property (nonatomic,strong)id body;
+@property (nonatomic,copy)NSString *callID;
+@property (nonatomic,copy)NSString *end;
 + (instancetype)initMsgBodyWithDic:(NSDictionary*)dic;
 @end
 NS_ASSUME_NONNULL_END

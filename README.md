@@ -56,6 +56,13 @@ window.ZLBridge.register("jsMethod",(arg) => {
      return arg;
  });
  ```
+ 或者
+ ```JavaScript
+ window.ZLBridge.registerWithCallback("jsMethod",(arg,callback) => {
+     callback(arg);
+  });
+  ```
+
 ### 原生调用jsMethod
 ```objective-c
 [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {

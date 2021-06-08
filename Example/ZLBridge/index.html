@@ -7,6 +7,7 @@
     <script type="text/javascript">
      function onClickB1() {
         window.ZLBridge.call('test',(arg) => {
+            window.callback(2);
             document.getElementById("b1").innerHTML = JSON.stringify(arg);
         });
     }
@@ -18,6 +19,10 @@
     function onClickB3() {
         window.ZLBridge.register("jsMethod",(arg) => {
              return arg?arg[0]:null;
+         });
+        return;
+        window.ZLBridge.registerWithCallback("jsMethod",(arg,callback) => {
+            callback(arg,false);
          });
     }     
     </script>
