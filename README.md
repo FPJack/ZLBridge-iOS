@@ -23,34 +23,41 @@ pod 'ZLBridge'
 ```objective-c
 [self.wkwebView initBridgeWithLocalJS:YES];
 ```
-## js调用原生
+# 原生与JS交互
 
 
-### 原生注册test事件
-```objective-c
-[self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
-    callback(@"js异步调用：这是原生返回的结果1000！",YES);
-}];
-```
-### js调用test
+## JS调用原生test事件
 
-#### 无参数
+### 无参数
 ```JavaScript
 window.ZLBridge.call('test',(arg) => {
 
 });
 ```
-#### 有参数参数
+### 有参数参数
 ```JavaScript
 window.ZLBridge.call('test',{key:"value"},(arg) => {
 
 });
 ```
-
+### 原生注册test事件
+```objective-c
+[self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
+    //YES代表JS只能监听一次回调结果，NO可以连续监听
+    callback(@"js异步调用：这是原生返回的结果1000！",YES);
+}];
+```
 
 
 ## 原生调用js
-### js注册jsMethod方法
+
+### 原生调用JS的jsMethod事件
+```objective-c
+[self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {
+}];
+```
+
+### js注册jsMethod事件
 ```JavaScript
 window.ZLBridge.register("jsMethod",(arg) => {
      return arg;
@@ -59,15 +66,11 @@ window.ZLBridge.register("jsMethod",(arg) => {
  或者
  ```JavaScript
  window.ZLBridge.registerWithCallback("jsMethod",(arg,callback) => {
-     callback(arg);
+    //ture代表原生只能监听一次回调结果，false可以连续监听，默认传为true
+     callback(arg,true);
   });
   ```
 
-### 原生调用jsMethod
-```objective-c
-[self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {
-}];
-```
 
 # 移除ZLBridge
 ```objective-c

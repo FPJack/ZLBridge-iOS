@@ -10,4 +10,6 @@ target 'ZLBridge_Example' do
 
     pod 'FBSnapshotTestCase'
   end
+#  pod trunk push ZLBridge.podspec --allow-warnings --verbose
+
 end
