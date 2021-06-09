@@ -7,6 +7,7 @@
 
 #import "WKWebView+ZLWebView.h"
 #import <objc/runtime.h>
+#define kUndefinedHandler @"kUndefinedHandler"
 @implementation ZLUtils
 + (NSString *)objToJsonString:(id)dict
 {
@@ -56,11 +57,11 @@
 ////////////////////
 @implementation WKWebView (ZLWebView)
 static const char JSCompletionHandlersKey = '\0';
-- (void)setRegistHanders:(NSMutableDictionary<NSString *,JSRegistHandler> *)registHanders {
+- (void)setRegistHanders:(NSMutableDictionary *)registHanders {
     objc_setAssociatedObject(self, &JSCompletionHandlersKey,
                              registHanders,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-- (NSMutableDictionary<NSString*,JSRegistHandler> *)registHanders {
+- (NSMutableDictionary *)registHanders {
     NSMutableDictionary *dic = objc_getAssociatedObject(self, &JSCompletionHandlersKey);
     if (dic == nil) {
         dic = [NSMutableDictionary dictionary];
@@ -120,17 +121,26 @@ static const char JSCallHandlersKey = '\0';
             NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCallback('%@','%@');",jsMethodId,[ZLUtils objToJsonString:mDic]];
             [weakSelf evaluateJavaScript:js completionHandler:nil];
         };
+        if (!registHandler) {
+            JSRegistUndefinedHandler registUndefinedHandler= weakSelf.registHanders[kUndefinedHandler];
+            if (registUndefinedHandler) registUndefinedHandler(name,body,callBack);
+            return;
+        }
         if (registHandler) registHandler(body,callBack);
     };
     [self.configuration.userContentController addScriptMessageHandler:bridge name:@"ZLBridge"];
 }
 - (void)destroyBridge{
     [self.registHanders removeAllObjects];
+    [self.callHanders removeAllObjects];
     [self.configuration.userContentController removeScriptMessageHandlerForName:@"ZLBridge"];
 }
 -(void) registHandler:(NSString * _Nonnull) methodName  completionHandler:(JSRegistHandler _Nonnull) registHandler{
     if (![methodName isKindOfClass:NSString.class] || !registHandler) return;
     self.registHanders[methodName] = registHandler;
+}
+-(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler{
+    if (registHandler) self.registHanders[kUndefinedHandler] = registHandler;
 }
 -(void)callHandler:(NSString * _Nonnull) methodName  completionHandler:(JSCompletionHandler _Nonnull)completionHandler{
     [self callHandler:methodName arguments:nil completionHandler:completionHandler];

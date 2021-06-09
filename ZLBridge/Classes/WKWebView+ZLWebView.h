@@ -9,6 +9,8 @@
 typedef void (^JSCompletionHandler)(id _Nullable obj, NSError * _Nullable error);
 typedef void (^JSCallbackHandler)(id _Nullable obj, BOOL end);
 typedef void (^JSRegistHandler)(id _Nullable obj,JSCallbackHandler _Nullable callback);
+typedef void (^JSRegistUndefinedHandler)(NSString * _Nullable name,id _Nullable obj,JSCallbackHandler _Nullable callback);
+
 NS_ASSUME_NONNULL_BEGIN
 @interface ZLUtils : NSObject
 + (NSString * _Nullable)objToJsonString:(id  _Nonnull)dict;
@@ -39,11 +41,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)initBridgeWithLocalJS:(BOOL )localJs;
 //需要手动移除bridge，否则会内存泄漏
 - (void)destroyBridge;
-//注册原生方法供js调用
+//注册原生事件给js调用
 -(void) registHandler:(NSString * _Nonnull) methodName  completionHandler:(JSRegistHandler _Nonnull) registHandler;
+//注册未定义的原生事件回调block
+-(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler;
 //原生调用js
 -(void) callHandler:(NSString * _Nonnull) methodName  completionHandler:(JSCompletionHandler _Nonnull)completionHandler;
-//原生调用js传参数
+//原生调用js有参数
 -(void) callHandler:(NSString * _Nonnull) methodName  arguments:(NSArray * _Nullable) args completionHandler:(JSCompletionHandler _Nonnull)completionHandler;
 //js是否注册了原生调用的方法
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;
