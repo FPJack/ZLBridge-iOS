@@ -39,6 +39,7 @@
     obj.name = dic[@"name"];
     obj.body = dic[@"body"];
     obj.callID = dic[@"callID"];
+    obj.error = dic[@"error"];
     obj.end = [NSString stringWithFormat:@"%@",dic[@"end"]];
     obj.jsMethodId = dic[@"jsMethodId"];
     return obj;
@@ -48,7 +49,7 @@
 ////////////////////
 @implementation ZLBridge
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
-    NSDictionary *body = message.body;
+    NSDictionary *body = [ZLUtils jsonStringToObject:message.body];
     ZLMsgBody *obj = [ZLMsgBody initMsgBodyWithDic:body];
     if (self.msgCallback) self.msgCallback(obj);
 }
@@ -101,14 +102,17 @@ static const char JSCallHandlersKey = '\0';
         NSString *name = message.name;
         NSString *callID = message.callID;
         NSString *end = message.end;
+        NSString *error = message.error;
         id body = message.body;
-        if (callID) {
+        if (callID && callID.length > 0) {
            JSCompletionHandler callHandler = weakSelf.callHanders[callID];
             if (callHandler) {
-                callHandler(body,nil);
-                if ([end isKindOfClass:NSString.class] && [end isEqualToString:@"1"]) {
-                    [weakSelf.callHanders removeObjectForKey:callID];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    callHandler(body,error);
+                    if ([end isKindOfClass:NSString.class] && [end isEqualToString:@"1"]) {
+                        [weakSelf.callHanders removeObjectForKey:callID];
+                    }
+                });
             }
             return;
         }
@@ -121,12 +125,14 @@ static const char JSCallHandlersKey = '\0';
             NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCallback('%@','%@');",jsMethodId,[ZLUtils objToJsonString:mDic]];
             [weakSelf evaluateJavaScript:js completionHandler:nil];
         };
-        if (!registHandler) {
-            JSRegistUndefinedHandler registUndefinedHandler= weakSelf.registHanders[kUndefinedHandler];
-            if (registUndefinedHandler) registUndefinedHandler(name,body,callBack);
-            return;
-        }
-        if (registHandler) registHandler(body,callBack);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (registHandler) {
+                registHandler(body,callBack);
+            }else {
+                JSRegistUndefinedHandler registUndefinedHandler= weakSelf.registHanders[kUndefinedHandler];
+                if (registUndefinedHandler) registUndefinedHandler(name,body,callBack);
+            }
+        });
     };
     [self.configuration.userContentController addScriptMessageHandler:bridge name:@"ZLBridge"];
 }
@@ -156,22 +162,7 @@ static const char JSCallHandlersKey = '\0';
         self.callHanders[ID] = completionHandler;
     }
     NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
-    __weak typeof(self) weakSelf = self;
-    [self evaluateJavaScript:js completionHandler:^(NSDictionary* _Nullable obj, NSError * _Nullable error) {
-        if (error) {
-            if (completionHandler) completionHandler(nil,error);
-            [weakSelf.callHanders removeObjectForKey:ID];
-        }else {
-            if ([obj isKindOfClass:NSDictionary.class]) {
-                NSString *sync = obj[@"sync"];
-                id result = obj[@"result"];
-                if ([sync isEqual:NSString.class] && sync.boolValue) {
-                    [weakSelf.callHanders removeObjectForKey:ID];
-                }
-                if (completionHandler) completionHandler(result,nil);
-            }
-        }
-    }];
+    [self evaluateJavaScript:js completionHandler:nil];
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
     if (!callback) return;

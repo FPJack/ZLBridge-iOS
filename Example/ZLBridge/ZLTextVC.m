@@ -38,14 +38,14 @@
     [self.wkwebView registHandler:@"upload" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
         [weakSelf uploadCompletionHandler:callback];
     }];
-    [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {
+    [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSString * _Nullable error) {
         NSString *msg = [obj isKindOfClass:NSString.class] ? obj : [ZLUtils objToJsonString:obj];
     }];
 
 }
 #pragma mark - 原生主动调用js
 - (IBAction)calljs:(UIButton*)sender {
-    [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生主动调用js原生传给js的值，js原封不动把值返回"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {
+    [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生主动调用js原生传给js的值，js原封不动把值返回"] completionHandler:^(id  _Nullable obj, NSString * _Nullable error) {
         NSLog(@"%@",obj);
         NSString *msg = [obj isKindOfClass:NSString.class] ? obj : [ZLUtils objToJsonString:obj];
         [sender setTitle: msg forState:UIControlStateNormal];

@@ -6,7 +6,7 @@
 //
 
 #import <WebKit/WebKit.h>
-typedef void (^JSCompletionHandler)(id _Nullable obj, NSError * _Nullable error);
+typedef void (^JSCompletionHandler)(id _Nullable obj, NSString * _Nullable error);
 typedef void (^JSCallbackHandler)(id _Nullable obj, BOOL end);
 typedef void (^JSRegistHandler)(id _Nullable obj,JSCallbackHandler _Nullable callback);
 typedef void (^JSRegistUndefinedHandler)(NSString * _Nullable name,id _Nullable obj,JSCallbackHandler _Nullable callback);
@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)id body;
 @property (nonatomic,copy)NSString *callID;
 @property (nonatomic,copy)NSString *end;
+@property (nonatomic,copy)NSString *error;
 + (instancetype)initMsgBodyWithDic:(NSDictionary*)dic;
 @end
 NS_ASSUME_NONNULL_END
