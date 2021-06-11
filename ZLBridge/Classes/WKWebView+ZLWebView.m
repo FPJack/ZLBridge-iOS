@@ -145,6 +145,13 @@ static const char JSCallHandlersKey = '\0';
     if (![methodName isKindOfClass:NSString.class] || !registHandler) return;
     self.registHanders[methodName] = registHandler;
 }
+- (void)removeRegistedHandlerWithMethodName:(NSString *)methodName{
+    if (!methodName) return;
+    [self.registHanders removeObjectForKey:methodName];
+}
+- (void)removeAllRegistedHandler{
+    [self.registHanders removeAllObjects];
+}
 -(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler{
     if (registHandler) self.registHanders[kUndefinedHandler] = registHandler;
 }

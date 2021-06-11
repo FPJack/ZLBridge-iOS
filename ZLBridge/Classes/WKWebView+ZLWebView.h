@@ -42,8 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)initBridgeWithLocalJS:(BOOL )localJs;
 //需要手动移除bridge，否则会内存泄漏
 - (void)destroyBridge;
-//注册原生事件给js调用
+//注册监听js调用事件
 -(void) registHandler:(NSString * _Nonnull) methodName  completionHandler:(JSRegistHandler _Nonnull) registHandler;
+//移除相应的js监听事件
+- (void)removeRegistedHandlerWithMethodName:(NSString *)methodName;
+//移除所有监听js事件
+- (void)removeAllRegistedHandler;
 //注册未定义的原生事件回调block
 -(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler;
 //原生调用js
