@@ -34,8 +34,8 @@
     [self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
         callback(obj,YES);
     }];
-    [self.wkwebView registUndefinedHandlerCompletionHandler:^(NSString * _Nullable name, id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
-            
+    [self.wkwebView registUndefinedHandler:^(NSString * _Nullable name, id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
+        NSLog(@"registUndefinedHandlerCompletionHandler:%@",name);
     }];
     [self.wkwebView registHandler:@"upload" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
         [self uploadCompletionHandler:callback];
@@ -69,13 +69,6 @@
         completionHandler(str,end);
     }];
 }
-- (IBAction)nextVC:(id)sender {
-    [self.navigationController pushViewController:ZLTextVC.new animated:YES];
-}
-- (void)dealloc
-{
-    [self.wkwebView destroyBridge];
-}
 - (IBAction)refresh:(id)sender {
     [self.wkwebView reload];
 }
@@ -91,5 +84,8 @@
         [sender setTitle:msg forState:UIControlStateNormal];
     }];
 }
-
+- (void)dealloc
+{
+    [self.wkwebView destroyBridge];
+}
 @end

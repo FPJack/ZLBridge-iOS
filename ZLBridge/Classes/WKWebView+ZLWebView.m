@@ -152,7 +152,7 @@ static const char JSCallHandlersKey = '\0';
 - (void)removeAllRegistedHandler{
     [self.registHanders removeAllObjects];
 }
--(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler{
+-(void) registUndefinedHandler:(JSRegistUndefinedHandler _Nonnull) registHandler{
     if (registHandler) self.registHanders[kUndefinedHandler] = registHandler;
 }
 -(void)callHandler:(NSString * _Nonnull) methodName  completionHandler:(JSCompletionHandler _Nonnull)completionHandler{
@@ -169,9 +169,7 @@ static const char JSCallHandlersKey = '\0';
         self.callHanders[ID] = completionHandler;
     }
     NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
-    [self evaluateJavaScript:js completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
-        
-    }];
+    [self evaluateJavaScript:js completionHandler:nil];
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
     if (!callback) return;

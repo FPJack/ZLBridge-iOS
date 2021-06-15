@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 //移除所有监听js事件
 - (void)removeAllRegistedHandler;
 //注册未定义的原生事件回调block
--(void) registUndefinedHandlerCompletionHandler:(JSRegistUndefinedHandler _Nonnull) registHandler;
+-(void) registUndefinedHandler:(JSRegistUndefinedHandler _Nonnull) registHandler;
 //原生调用js
 -(void) callHandler:(NSString * _Nonnull) methodName  completionHandler:(JSCompletionHandler _Nonnull)completionHandler;
 //原生调用js有参数

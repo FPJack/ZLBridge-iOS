@@ -35,23 +35,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jWo-QR-LSZ">
-                                <rect key="frame" x="52.5" y="537" width="270" height="30"/>
-                                <state key="normal" title="原生调用js的jsMethod方法：js先在注册"/>
-                                <connections>
-                                    <action selector="calljs:" destination="whP-gf-Uak" eventType="touchUpInside" id="ldV-Mx-ljq"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fhd-sR-rGo">
-                                <rect key="frame" x="148" y="609" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="nextVC:" destination="whP-gf-Uak" eventType="touchUpInside" id="Kbv-cU-U5m"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdZ-SQ-dqn">
-                                <rect key="frame" x="293" y="466" width="31" height="30"/>
+                                <rect key="frame" x="285" y="495" width="31" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="刷新"/>
                                 <connections>
@@ -59,14 +44,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NNF-rl-xgy">
-                                <rect key="frame" x="65" y="449" width="86" height="30"/>
+                                <rect key="frame" x="65" y="487" width="86" height="30"/>
                                 <state key="normal" title="调用JS事件1"/>
                                 <connections>
                                     <action selector="jsAction1:" destination="whP-gf-Uak" eventType="touchUpInside" id="ZEc-cm-YAp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gn-Ik-zsb">
-                                <rect key="frame" x="65" y="487" width="88" height="30"/>
+                                <rect key="frame" x="65" y="537" width="88" height="30"/>
                                 <state key="normal" title="调用JS事件2"/>
                                 <connections>
                                     <action selector="jsAction2:" destination="whP-gf-Uak" eventType="touchUpInside" id="AgI-QY-jYa"/>
@@ -75,12 +60,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="jWo-QR-LSZ" secondAttribute="bottom" constant="100" id="Aqj-eJ-eDL"/>
+                            <constraint firstItem="5gn-Ik-zsb" firstAttribute="top" secondItem="NNF-rl-xgy" secondAttribute="bottom" constant="20" id="4pT-JD-44k"/>
                             <constraint firstItem="5gn-Ik-zsb" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="49" id="NH2-nJ-dZ1"/>
-                            <constraint firstItem="jWo-QR-LSZ" firstAttribute="top" secondItem="NNF-rl-xgy" secondAttribute="bottom" constant="58" id="Ptf-EC-K6W"/>
-                            <constraint firstItem="jWo-QR-LSZ" firstAttribute="top" secondItem="5gn-Ik-zsb" secondAttribute="bottom" constant="20" id="TcS-wf-XgB"/>
+                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="5gn-Ik-zsb" secondAttribute="bottom" constant="100" id="WHD-1q-jcU"/>
                             <constraint firstItem="NNF-rl-xgy" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="49" id="bu4-dA-aSH"/>
-                            <constraint firstItem="jWo-QR-LSZ" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="edP-b1-IMJ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Nge-8y-P7q"/>
