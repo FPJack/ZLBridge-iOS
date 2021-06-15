@@ -21,7 +21,12 @@ pod 'ZLBridge'
 ```
 # 初始化
 ```objective-c
+//YES：原生注入本地js脚本初始化ZLBridge，NO：由H5初始化ZLBridge
 [self.wkwebView initBridgeWithLocalJS:YES];
+```
+H5初始化ZLBridge
+```JavaScript
+ var ZLBridge = require('zlbridge-js')
 ```
 # 原生与JS交互
 
@@ -71,7 +76,13 @@ window.ZLBridge.register("jsMethod",(arg) => {
   });
   ```
 
-
+# 通过本地注入JS脚本的，H5可以监听ZLBridge初始化完成
+```JavaScript
+document.addEventListener('ZLBridgeInitReady', function() {
+    consloe.log('ZLBridge初始化完成');
+},false);
+  ```
+  
 # 移除ZLBridge
 ```objective-c
 [self.wkwebView destroyBridge];

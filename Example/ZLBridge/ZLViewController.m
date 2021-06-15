@@ -9,7 +9,7 @@
 #import <WebKit/WebKit.h>
 #import <ZLBridge/WKWebView+ZLWebView.h>
 #import "ZLTextVC.h"
-@interface ZLViewController ()
+@interface ZLViewController ()<WKUIDelegate>
 @property (strong, nonatomic)  WKWebView *wkwebView;
 @property (strong,nonatomic)NSTimer *timer;
 @end
@@ -25,16 +25,24 @@
     [super viewDidLoad];
     self.wkwebView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300)];
     [self.wkwebView initBridgeWithLocalJS:YES];
+    self.wkwebView.UIDelegate = self;
     NSString *path = [NSBundle.mainBundle pathForResource:@"index.html" ofType:nil];
     NSURL *url = [NSURL fileURLWithPath:path];
+//    url = [NSURL URLWithString:@"http://192.168.31.247:3000"];
     [self.wkwebView loadRequest:[NSURLRequest requestWithURL:url]];
     [self.view addSubview:self.wkwebView];
     [self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
-        callback(@"js异步调用：这是原生返回的结果1000！",YES);
+        callback(obj,YES);
+    }];
+    [self.wkwebView registUndefinedHandlerCompletionHandler:^(NSString * _Nullable name, id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
+            
     }];
     [self.wkwebView registHandler:@"upload" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
         [self uploadCompletionHandler:callback];
     }];
+}
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
+    completionHandler();
 }
 #pragma mark - 原生主动调用js
 - (IBAction)calljs:(UIButton*)sender {
@@ -68,4 +76,20 @@
 {
     [self.wkwebView destroyBridge];
 }
+- (IBAction)refresh:(id)sender {
+    [self.wkwebView reload];
+}
+- (IBAction)jsAction1:(id)sender {
+    [self.wkwebView callHandler:@"jsMethod" completionHandler:^(id  _Nullable obj, NSString * _Nullable error) {
+        NSString *msg = error ? error : @"成功调用JS事件1";
+        [sender setTitle:msg forState:UIControlStateNormal];
+    }];
+}
+- (IBAction)jsAction2:(UIButton*)sender {
+    [self.wkwebView callHandler:@"jsMethodWithCallback" arguments:nil completionHandler:^(id  _Nullable obj, NSString * _Nullable error) {
+        NSString *msg = error ? error : @"成功调用JS事件2";
+        [sender setTitle:msg forState:UIControlStateNormal];
+    }];
+}
+
 @end

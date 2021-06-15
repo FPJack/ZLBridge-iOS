@@ -4,39 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        Button {
+             display: block;
+        }
+    </style>
     <script type="text/javascript">
      function onClickB1() {
+
         window.ZLBridge.call('test',(arg) => {
             document.getElementById("b1").innerHTML = JSON.stringify(arg);
         });
     }
+    function onClickB2() {
+        window.ZLBridge.call('test',{key:'js传过来的value'},(arg) => {
+            document.getElementById("b2").innerHTML = JSON.stringify(arg);
+        });
+    }
     function onClickB4() {
-         window.ZLBridge.call('upload',{"id":"js异步传过来的值"},(arg) => {
+         window.ZLBridge.call('upload',(arg) => {
             document.getElementById("b4").innerHTML = JSON.stringify(arg);
         });
     }
     function onClickB3() {
         window.ZLBridge.register("jsMethod",(arg) => {
-             return arg?arg[0]:null;
+             var msg = arg[0] ? JSON.stringify(arg[0]) : "已收到原生调用js消息";
+             document.getElementById("b3").innerHTML = msg;
+             return arg;
          });
-        return;
-        window.ZLBridge.registerWithCallback("jsMethod",(arg,callback) => {
-            callback(arg,false);
+    }
+    function onClickB5() {
+        window.ZLBridge.registerWithCallback("jsMethodWithCallback",(arg,callback) => {
+             var msg = arg[0] ? JSON.stringify(arg[0]) : "已收到原生调用js消息";
+             document.getElementById("b5").innerHTML = msg;
+             callback(msg);
          });
-    }     
+    }
+    function onClickB6() {
+         window.ZLBridge.call('testMethod',{key:'js传过来的value'},(arg) => {
+            document.getElementById("b2").innerHTML = JSON.stringify(arg);
+        });
+    }
+    document.addEventListener('ZLBridgeInitReady', function() {
+        consloe.log('ZLBridge初始化完成');
+    },false);
     </script>
     <title>Document</title>
 </head>
 <body>
-    <div>
-        <button id="b1" onclick="onClickB1()">js调用原生</button>
-    </div>
-    <div>
-        <button id="b4"   onclick="onClickB4()">js调用原生,原生连续回调</button>
-    </div>
-    <div>
-        <button id="b3" onclick="onClickB3()">js注册原生方法：jsMethod</button>
-    </div>
-
+    <Button id="b1" onclick="onClickB1()">js调用原生(不携带参数)</Button>
+    <Button id="b2" onclick="onClickB2()">js调用原生(携带参数)</Button>
+    <Button id="b4"   onclick="onClickB4()">js调用原生,原生连续回调</Button>
+    <Button id="b6" onclick="onClickB6()">js调用原生未监听的事件:testMethod</Button>
+    <br>
+    <br>
+    <Button id="b3" onclick="onClickB3()">js注册事件1：register注册</Button>
+    <Button id="b5" onclick="onClickB5()">js注册事件2：registerWithCallback注册</Button>
 </body>
 </html>
