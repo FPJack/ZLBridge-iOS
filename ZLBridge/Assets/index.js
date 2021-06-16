@@ -1,6 +1,6 @@
-var ZLBridge = (function () {
-    if (window.ZLBridge) return window.ZLBridge;
-    var ZLBridge = {
+(function () {
+    if (window.zlbridge) return window.zlbridge;
+    var zlbridge = {
         call: function(method,arg,func){
             if (typeof method != 'string') return;
             if (typeof arg == 'function') {
@@ -16,29 +16,29 @@ var ZLBridge = (function () {
                 var _callHandlerID = setTimeout(function(){});
                 _callHandlerID = '_methodid_' + _callHandlerID + new Date().getTime();
                 args['jsMethodId'] = _callHandlerID ;
-                window.ZLBridge[_callHandlerID] = func;
+                window.zlbridge[_callHandlerID] = func;
             }
-            window.ZLBridge._callNative(args);
+            window.zlbridge._callNative(args);
         },
          _callNative: function(arg) {
-               if(window.androidBridge && window.androidBridge.messageHandlers){
-                  window.androidBridge.messageHandlers(JSON.stringify(arg));
+               if(window.ZLBridge && window.ZLBridge.postMessage){
+                  window.ZLBridge.postMessage(JSON.stringify(arg));
                }else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.ZLBridge){
                   window.webkit.messageHandlers.ZLBridge.postMessage(JSON.stringify(arg));
                }
           },
         register: function(method,func){
             if (typeof func == 'function' && typeof method == 'string') {
-                window.ZLBridge['_register_' + method] = func;
+                window.zlbridge['_register_' + method] = func;
             }
         },
         removeRegisted: function(method) {
             var id = '_register_' + method;
-            if (typeof method == 'string' && window.ZLBridge[id]) delete window.ZLBridge[id];
+            if (typeof method == 'string' && window.zlbridge[id]) delete window.zlbridge[id];
          },
         registerWithCallback: function(method,func){
             if (typeof func == 'function' && typeof method == 'string') {
-                window.ZLBridge['_register_callback' + method] = func;
+                window.zlbridge['_register_callback' + method] = func;
             }
         },
         _nativeCall: function(method,arg) {
@@ -47,46 +47,46 @@ var ZLBridge = (function () {
             var callID = obj['callID'];
             setTimeout(() => {
                   try {
-                       var func = window.ZLBridge['_register_' + method];
+                       var func = window.zlbridge['_register_' + method];
                        if (typeof func == 'function') {
                            var args = {};
                            args['end'] = true;
                            if (callID) args['callID'] = callID;
                            args['body'] = func(result);
-                           return window.ZLBridge._callNative(args);
+                           return window.zlbridge._callNative(args);
                        }
-                       func = window.ZLBridge['_register_callback' + method];
+                       func = window.zlbridge['_register_callback' + method];
                        var callback = function (params,end) {
                            var args = {};
                            if (callID) args['callID'] = callID;
                            args['body'] = params;
                            args['end'] = (typeof end == 'boolean')?end:true;
-                           window.ZLBridge._callNative(args);
+                           window.zlbridge._callNative(args);
                        };
                        func(result,callback);
                      } catch (error) {
-                       window.ZLBridge._callNative({error:error.message,callID:callID,end:true});
+                       window.zlbridge._callNative({error:error.message,callID:callID,end:true});
                   }
            });
         },
         _nativeCallback: function(methodid,arg){
             setTimeout(() => {
-               var func = window.ZLBridge[methodid];
+               var func = window.zlbridge[methodid];
                if (typeof func != 'function') return;
                arg = JSON.parse(arg);
                func(arg['result']);
-               if (arg.end==1) delete window.ZLBridge[methodid];
+               if (arg.end==1) delete window.zlbridge[methodid];
             });
         },
         _hasNativeMethod: function(method) {
-            var func = window.ZLBridge['_register_' + method];
+            var func = window.zlbridge['_register_' + method];
             return (func!=null||func!=undefined);
         }
     };
-    window.ZLBridge = ZLBridge;
+    window.zlbridge = zlbridge;
     var doc = document;
     var event = doc.createEvent('Events');
     event.initEvent('ZLBridgeInitReady');
     doc.dispatchEvent(event);
-    return ZLBridge;
+    return zlbridge;
 })();

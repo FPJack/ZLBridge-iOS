@@ -12,36 +12,36 @@
     <script type="text/javascript">
      function onClickB1() {
 
-        window.ZLBridge.call('test',(arg) => {
+        window.zlbridge.call('test',(arg) => {
             document.getElementById("b1").innerHTML = JSON.stringify(arg);
         });
     }
     function onClickB2() {
-        window.ZLBridge.call('test',{key:'js传过来的value'},(arg) => {
+        window.zlbridge.call('test',{key:'js传过来的value'},(arg) => {
             document.getElementById("b2").innerHTML = JSON.stringify(arg);
         });
     }
     function onClickB4() {
-         window.ZLBridge.call('upload',(arg) => {
+         window.zlbridge.call('upload',(arg) => {
             document.getElementById("b4").innerHTML = JSON.stringify(arg);
         });
     }
     function onClickB3() {
-        window.ZLBridge.register("jsMethod",(arg) => {
+        window.zlbridge.register("jsMethod",(arg) => {
              var msg = arg[0] ? JSON.stringify(arg[0]) : "已收到原生调用js消息";
              document.getElementById("b3").innerHTML = msg;
              return arg;
          });
     }
     function onClickB5() {
-        window.ZLBridge.registerWithCallback("jsMethodWithCallback",(arg,callback) => {
+        window.zlbridge.registerWithCallback("jsMethodWithCallback",(arg,callback) => {
              var msg = arg[0] ? JSON.stringify(arg[0]) : "已收到原生调用js消息";
              document.getElementById("b5").innerHTML = msg;
              callback(msg);
          });
     }
     function onClickB6() {
-         window.ZLBridge.call('testMethod',{key:'js传过来的value'},(arg) => {
+         window.zlbridge.call('testMethod',{key:'js传过来的value'},(arg) => {
             document.getElementById("b2").innerHTML = JSON.stringify(arg);
         });
     }

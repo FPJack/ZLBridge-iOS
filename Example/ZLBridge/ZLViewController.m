@@ -28,7 +28,7 @@
     self.wkwebView.UIDelegate = self;
     NSString *path = [NSBundle.mainBundle pathForResource:@"index.html" ofType:nil];
     NSURL *url = [NSURL fileURLWithPath:path];
-//    url = [NSURL URLWithString:@"http://192.168.31.247:3000"];
+//    url = [NSURL URLWithString:@"http://localhost:3000/"];
     [self.wkwebView loadRequest:[NSURLRequest requestWithURL:url]];
     [self.view addSubview:self.wkwebView];
     [self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {

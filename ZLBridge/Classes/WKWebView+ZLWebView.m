@@ -122,7 +122,7 @@ static const char JSCallHandlersKey = '\0';
             NSMutableDictionary *mDic = NSMutableDictionary.dictionary;
             mDic[@"end"] = end?@1:@0;
             mDic[@"result"] = result?result:@"";
-            NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCallback('%@','%@');",jsMethodId,[ZLUtils objToJsonString:mDic]];
+            NSString *js = [NSString stringWithFormat:@"window.zlbridge._nativeCallback('%@','%@');",jsMethodId,[ZLUtils objToJsonString:mDic]];
             [weakSelf evaluateJavaScript:js completionHandler:nil];
         };
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -168,7 +168,7 @@ static const char JSCallHandlersKey = '\0';
         dic[@"callID"] = ID;
         self.callHanders[ID] = completionHandler;
     }
-    NSString *js = [NSString stringWithFormat:@"window.ZLBridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
+    NSString *js = [NSString stringWithFormat:@"window.zlbridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
     [self evaluateJavaScript:js completionHandler:nil];
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
@@ -177,7 +177,7 @@ static const char JSCallHandlersKey = '\0';
         callback(NO);
         return;
     }
-    NSString *js = [NSString stringWithFormat:@"window.ZLBridge._hasNativeMethod('%@');",methodName];
+    NSString *js = [NSString stringWithFormat:@"window.zlbridge._hasNativeMethod('%@');",methodName];
     [self evaluateJavaScript:js completionHandler:^(NSNumber * _Nullable obj, NSError * _Nullable error) {
         if (error) {
             callback(NO);
