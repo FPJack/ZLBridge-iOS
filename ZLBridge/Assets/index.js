@@ -1,5 +1,5 @@
 (function () {
-    if (window.zlbridge) return window.zlbridge;
+    if (window.zlbridge) return ;
     var zlbridge = {
         call: function(method,arg,func){
             if (typeof method != 'string') return;
@@ -88,5 +88,4 @@
     var event = doc.createEvent('Events');
     event.initEvent('ZLBridgeInitReady');
     doc.dispatchEvent(event);
-    return zlbridge;
 })();
