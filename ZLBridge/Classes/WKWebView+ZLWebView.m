@@ -170,7 +170,13 @@ static const char JSCallHandlersKey = '\0';
             self.callHanders[ID] = completionHandler;
         }
         NSString *js = [NSString stringWithFormat:@"window.zlbridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
-        [self evaluateJavaScript:js completionHandler:nil];
+        __weak typeof(self) weakSelf = self;
+        [self evaluateJavaScript:js completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
+            if (error && completionHandler) {
+                completionHandler(nil,error.description);
+                if (ID) [weakSelf.callHanders removeObjectForKey:ID];
+            }
+        }];
     });
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
