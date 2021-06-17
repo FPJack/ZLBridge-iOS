@@ -162,14 +162,16 @@ static const char JSCallHandlersKey = '\0';
     args = args == nil ? @[] : args;
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     if (args) dic[@"result"] = args;
-    NSString *ID;
-    if (completionHandler) {
-        ID = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
-        dic[@"callID"] = ID;
-        self.callHanders[ID] = completionHandler;
-    }
-    NSString *js = [NSString stringWithFormat:@"window.zlbridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
-    [self evaluateJavaScript:js completionHandler:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *ID;
+        if (completionHandler) {
+            ID = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+            dic[@"callID"] = ID;
+            self.callHanders[ID] = completionHandler;
+        }
+        NSString *js = [NSString stringWithFormat:@"window.zlbridge._nativeCall('%@','%@');",methodName,[ZLUtils objToJsonString:dic]];
+        [self evaluateJavaScript:js completionHandler:nil];
+    });
 }
 - (void)hasNativeMethod:(NSString * _Nonnull)methodName callback:(void(^ _Nullable)(BOOL exist))callback;{
     if (!callback) return;
