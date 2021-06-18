@@ -22,7 +22,7 @@ pod 'ZLBridge'
 H5初始化zlbridge
 ```JavaScript
  //导入一次后也可以通过window.zlbridge拿zlbridge对象
- var zlbridge = require('zlbridge-js')
+ var zlbridge = require('zlbridge')
 ```
 ## 原生与JS交互
 
