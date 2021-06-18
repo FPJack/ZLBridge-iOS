@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/cocoapods/l/ZLBridge.svg?style=flat)](https://cocoapods.org/pods/ZLBridge)
 [![Platform](https://img.shields.io/cocoapods/p/ZLBridge.svg?style=flat)](https://cocoapods.org/pods/ZLBridge)
 
-## Example
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+## 说明
+ZLBridge是为iOS的WKWebview和JS数据交互时提供更简单方便的小工具组件，使用简单，对第三方库已开发好的WKWebView也可支持，可配合H5端使用ZLBridge-JS库来数据交互，也可选择原生本地注入JS代码，H5无需任何集成操作。目前已支持的平台有[ZLBridge-Android](https://github.com/FPJack/ZLBridge-Android),[ZLBridge-JS](https://github.com/FPJack/ZLBridge-JS),[ZLBridge-flutter](https://github.com/FPJack/ZLBridge-flutter).后续可能会添加ZLBridge-RN的支持
 
 ## 安装
 ```ruby
