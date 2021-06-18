@@ -6,21 +6,16 @@
 [![Platform](https://img.shields.io/cocoapods/p/ZLBridge.svg?style=flat)](https://cocoapods.org/pods/ZLBridge)
 
 ## Example
-
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## Requirements
-
-## Installation
-
-ZLBridge is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
+## 安装
 ```ruby
 pod 'ZLBridge'
 ```
 ## H5端window.zlbridge初始化
 ```objective-c
+#import <ZLBridge/WKWebView+ZLWebView.h>
+
 //YES：原生注入本地js脚本初始化zlbridge，NO：由H5初始化zlbridge
 [self.wkwebView initBridgeWithLocalJS:YES];
 ```
