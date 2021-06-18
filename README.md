@@ -88,6 +88,7 @@ document.addEventListener('ZLBridgeInitReady', function() {
 ```objective-c
 [self.wkwebView destroyBridge];
 ```
+## !!! iOS传给JS的值需支持放入字典里面可以NSJSONSerialization的对象
 ## Author
 
 范鹏, 2551412939@qq.com
