@@ -87,7 +87,7 @@ static const char JSCallHandlersKey = '\0';
 - (void)initBridgeWithLocalJS:(BOOL )localJs{
     if (localJs) {
         NSBundle *selfBundle = [NSBundle bundleForClass:ZLBridge.class];
-        NSString *path = [selfBundle pathForResource:@"ZLBridge.bundle/index.js" ofType:nil];
+        NSString *path = [selfBundle pathForResource:@"ZLBridge.bundle/ZLBridge.js" ofType:nil];
         NSData *data=[NSData dataWithContentsOfFile:path];
         NSString *js =  [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         WKUserScript *jsScript = [[WKUserScript alloc] initWithSource:js
