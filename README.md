@@ -19,33 +19,34 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'ZLBridge'
 ```
-# 初始化
+## H5端window.zlbridge初始化
 ```objective-c
-//YES：原生注入本地js脚本初始化ZLBridge，NO：由H5初始化ZLBridge
+//YES：原生注入本地js脚本初始化zlbridge，NO：由H5初始化zlbridge
 [self.wkwebView initBridgeWithLocalJS:YES];
 ```
-H5初始化ZLBridge
+H5初始化zlbridge
 ```JavaScript
- var ZLBridge = require('zlbridge-js')
+ //导入一次后也可以通过window.zlbridge拿zlbridge对象
+ var zlbridge = require('zlbridge-js')
 ```
-# 原生与JS交互
+## 原生与JS交互
 
 
-## JS调用原生test事件
+### JS调用原生test事件
 
-### 无参数
+#### 无参数
 ```JavaScript
-window.ZLBridge.call('test',(arg) => {
+window.zlbridge.call('test',(arg) => {
 
 });
 ```
-### 有参数参数
+#### 有参数参数
 ```JavaScript
-window.ZLBridge.call('test',{key:"value"},(arg) => {
+window.zlbridge.call('test',{key:"value"},(arg) => {
 
 });
 ```
-### 原生注册test事件
+#### 原生注册test事件
 ```objective-c
 [self.wkwebView registHandler:@"test" completionHandler:^(id  _Nullable obj, JSCallbackHandler  _Nullable callback) {
     //YES代表JS只能监听一次回调结果，NO可以连续监听
@@ -54,36 +55,36 @@ window.ZLBridge.call('test',{key:"value"},(arg) => {
 ```
 
 
-## 原生调用js
+### 原生调用js
 
-### 原生调用JS的jsMethod事件
+#### 原生调用JS的jsMethod事件
 ```objective-c
 [self.wkwebView callHandler:@"jsMethod" arguments:@[@"这是原生调用js传的值"] completionHandler:^(id  _Nullable obj, NSError * _Nullable error) {
 }];
 ```
 
-### js注册jsMethod事件
+#### js注册jsMethod事件
 ```JavaScript
-window.ZLBridge.register("jsMethod",(arg) => {
+window.zlbridge.register("jsMethod",(arg) => {
      return arg;
  });
  ```
  或者
  ```JavaScript
- window.ZLBridge.registerWithCallback("jsMethod",(arg,callback) => {
+ window.zlbridge.registerWithCallback("jsMethod",(arg,callback) => {
     //ture代表原生只能监听一次回调结果，false可以连续监听，默认传为true
      callback(arg,true);
   });
   ```
 
-# 通过本地注入JS脚本的，H5可以监听ZLBridge初始化完成
+## 通过本地注入JS脚本的，H5可以监听ZLBridge初始化完成
 ```JavaScript
 document.addEventListener('ZLBridgeInitReady', function() {
     consloe.log('ZLBridge初始化完成');
 },false);
   ```
   
-# 移除ZLBridge
+## 移除ZLBridge
 ```objective-c
 [self.wkwebView destroyBridge];
 ```
