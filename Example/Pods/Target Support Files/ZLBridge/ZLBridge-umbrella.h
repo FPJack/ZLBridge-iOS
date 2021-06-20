@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#import "WKWebView+ZLWebView.h"
+#import "WKWebView+ZLBridge.h"
 
 FOUNDATION_EXPORT double ZLBridgeVersionNumber;
 FOUNDATION_EXPORT const unsigned char ZLBridgeVersionString[];

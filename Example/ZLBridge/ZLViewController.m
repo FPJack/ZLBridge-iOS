@@ -7,7 +7,7 @@
 //
 #import "ZLViewController.h"
 #import <WebKit/WebKit.h>
-#import <ZLBridge/WKWebView+ZLWebView.h>
+#import <WKWebView+ZLBridge.h>
 #import "ZLTextVC.h"
 @interface ZLViewController ()<WKUIDelegate>
 @property (strong, nonatomic)  WKWebView *wkwebView;

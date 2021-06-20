@@ -8,7 +8,7 @@
 
 #import "ZLWebview.h"
 #import <objc/runtime.h>
-#import <WKWebView+ZLWebView.h>
+#import <WKWebView+ZLBridge.h>
 @implementation ZLWebview
 
 /*

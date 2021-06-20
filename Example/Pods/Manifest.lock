@@ -4,7 +4,7 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - ZLBridge (0.1.2)
+  - ZLBridge (1.0.0)
 
 DEPENDENCIES:
   - FBSnapshotTestCase
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  ZLBridge: a913b801db2aa050342956ec7734859d5b71092e
+  ZLBridge: 5202001bbf512ad35072d1c993f55ffff9247a6b
 
 PODFILE CHECKSUM: affccafbf7f67f785a478373a0839b65dfda2bc8
 

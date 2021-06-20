@@ -8,7 +8,7 @@
 
 #import "ZLTextVC.h"
 #import <WebKit/WebKit.h>
-#import <ZLBridge/WKWebView+ZLWebView.h>
+#import <ZLBridge/WKWebView+ZLBridge.h>
 #import "ZLWebview.h"
 @interface ZLTextVC ()
 @property (strong, nonatomic)  WKWebView *wkwebView;

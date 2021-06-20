@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 NS_ASSUME_NONNULL_BEGIN
-@interface WKWebView (ZLWebView)
+@interface WKWebView (ZLBridge)
 //初始化bridge的时候是否本地注入js
 - (void)initBridgeWithLocalJS:(BOOL )localJs;
 //需要手动移除bridge，否则会内存泄漏

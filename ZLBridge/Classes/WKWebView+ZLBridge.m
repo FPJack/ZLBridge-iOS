@@ -5,7 +5,7 @@
 //  Created by 范鹏 on 2021/6/4.
 //
 
-#import "WKWebView+ZLWebView.h"
+#import "WKWebView+ZLBridge.h"
 #import <objc/runtime.h>
 #define kUndefinedHandler @"kUndefinedHandler"
 @implementation ZLUtils
@@ -56,7 +56,7 @@
 @end
 /////////////////////
 ////////////////////
-@implementation WKWebView (ZLWebView)
+@implementation WKWebView (ZLBridge)
 static const char JSCompletionHandlersKey = '\0';
 - (void)setRegistHanders:(NSMutableDictionary *)registHanders {
     objc_setAssociatedObject(self, &JSCompletionHandlersKey,
