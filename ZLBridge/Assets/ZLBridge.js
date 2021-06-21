@@ -21,11 +21,14 @@
             window.zlbridge._callNative(args);
         },
          _callNative: function(arg) {
+               var json = JSON.stringify(arg);
                if(window.ZLBridge && window.ZLBridge.postMessage){
-                  window.ZLBridge.postMessage(JSON.stringify(arg));
+                  window.ZLBridge.postMessage(json);
                }else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.ZLBridge){
-                  window.webkit.messageHandlers.ZLBridge.postMessage(JSON.stringify(arg));
-               }
+                  window.webkit.messageHandlers.ZLBridge.postMessage(json);
+               }else if(window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+                   window.ReactNativeWebView.postMessage(json);
+                }
           },
         register: function(method,func){
             if (typeof func == 'function' && typeof method == 'string') {
@@ -81,7 +84,7 @@
         },
         _hasNativeMethod: function(method) {
             var func = window.zlbridge['_register_' + method];
-            if (typeof func != "function")func = window.zlbridge['_register_callback' + method];
+            if (typeof func != 'function')func = window.zlbridge['_register_callback' + method];
             return (func!=null||func!=undefined);
         }
     };
