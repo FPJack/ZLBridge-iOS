@@ -15,6 +15,7 @@ ZLBridge是为iOS的WKWebview和JS数据交互时提供更简单方便的小工�
 
 ## 安装
 ```ruby
+//如果安装失败，pod update更新一下
 pod 'ZLBridge'
 ```
 ## H5端window.zlbridge初始化
